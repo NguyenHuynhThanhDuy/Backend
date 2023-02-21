@@ -1,11 +1,10 @@
-import express from 'express';
-import morgan from 'morgan';
-import bodyParser from 'body-parser';
+const express = require('express');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 async function App() {
     const app = express();
     const port = process.env.PORT || 3000;
-
     app.use(morgan('dev'));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
@@ -18,7 +17,7 @@ async function App() {
         }
         next();
     });
-    
+
     app.use((req, res, next) => {
         const error = new Error('Not found');
         error.status = 404;

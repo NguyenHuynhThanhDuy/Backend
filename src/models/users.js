@@ -28,9 +28,13 @@ module.exports = (sequelize, DataTypes) => {
     birthday: DataTypes.DATE,
     number_phone: DataTypes.STRING,
     verify: DataTypes.TINYINT,
+    created_at: DataTypes.DATE(6),
+    updated_at: DataTypes.DATE(6),
+    deleted_at: DataTypes.DATE(6),
   }, {
     sequelize,
     modelName: 'User',
+    timestamps: false
   });
   return User;
 };

@@ -17,10 +17,13 @@ module.exports = (sequelize, DataTypes) => {
     }
     Brand.init({
         name: DataTypes.STRING,
-        delete_at: DataTypes.DATE(6),
+        deleted_at: DataTypes.DATE(6),
+        created_at: DataTypes.DATE(6),
+        updated_at: DataTypes.DATE(6),
     }, {
         sequelize,
         modelName: 'Brand',
+        timestamps: false
     });
     return Brand;
 };

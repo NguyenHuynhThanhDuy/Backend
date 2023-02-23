@@ -23,6 +23,8 @@ module.exports = (sequelize, DataTypes) => {
         price: DataTypes.INTEGER(11),
         bill_id: DataTypes.BIGINT(20),
         product_id: DataTypes.BIGINT(20),
+        timestamps: false
+
     }, {
         sequelize,
         modelName: 'BillDetail',

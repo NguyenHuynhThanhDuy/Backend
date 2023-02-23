@@ -24,9 +24,12 @@ module.exports = (sequelize, DataTypes) => {
     PurchaseOrder.init({
         supplier_id: DataTypes.BIGINT(20),
         staff_id: DataTypes.BIGINT(20),
+        created_at: DataTypes.DATE(6),
+        updated_at: DataTypes.DATE(6),
     }, {
         sequelize,
         modelName: 'PurchaseOrder',
+        timestamps: false
     });
     return PurchaseOrder;
 };

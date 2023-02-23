@@ -1,7 +1,9 @@
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-
+const dotenv = require('dotenv');
+dotenv.config();
+const authRouter = require("./auth/auth.router");
 async function App() {
     const app = express();
     const port = process.env.PORT || 3000;
@@ -17,6 +19,8 @@ async function App() {
         }
         next();
     });
+
+    app.use('/auth', authRouter);
 
     app.use((req, res, next) => {
         const error = new Error('Not found');

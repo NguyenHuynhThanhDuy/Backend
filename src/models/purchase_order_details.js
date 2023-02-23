@@ -18,9 +18,10 @@ module.exports = (sequelize, DataTypes) => {
         price: DataTypes.INTEGER(11),
         purchase_order_id: DataTypes.BIGINT(20),
         product_id: DataTypes.BIGINT(20),
+
     }, {
         sequelize,
-        modelName: 'PurchaseOrderDetail',
+        modelName: 'PurchaseOrderDetail', timestamps: false
     });
     return PurchaseOrderDetail;
 };

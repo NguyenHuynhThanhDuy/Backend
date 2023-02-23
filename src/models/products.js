@@ -36,11 +36,14 @@ module.exports = (sequelize, DataTypes) => {
         img1: DataTypes.STRING,
         img2: DataTypes.STRING,
         description: DataTypes.STRING,
-        delete_at: DataTypes.DATE(6),
+        deleted_at: DataTypes.DATE(6),
         brand_id: DataTypes.BIGINT(20),
         category_id: DataTypes.BIGINT(20),
         sale_code_id: DataTypes.INTEGER(11),
         warranty_period: DataTypes.INTEGER(11),
+        created_at: DataTypes.DATE(6),
+        updated_at: DataTypes.DATE(6),
+        timestamps: false
     }, {
         sequelize,
         modelName: 'Product',

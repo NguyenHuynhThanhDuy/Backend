@@ -18,9 +18,11 @@ module.exports = (sequelize, DataTypes) => {
         amount: DataTypes.INTEGER(11),
         product_id: DataTypes.BIGINT(11),
         inventory_id: DataTypes.BIGINT(11),
+
     }, {
         sequelize,
         modelName: 'ProductInventory',
+        timestamps: false
     });
     return ProductInventory;
 };

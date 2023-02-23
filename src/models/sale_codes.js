@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
         percent: DataTypes.INTEGER(11),
         start_date: DataTypes.DATE,
         end_date: DataTypes.DATE,
+        created_at: DataTypes.DATE(6),
+        updated_at: DataTypes.DATE(6),
+        timestamps: false
     }, {
         sequelize,
         modelName: 'SaleCode',

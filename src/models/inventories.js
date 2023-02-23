@@ -18,10 +18,13 @@ module.exports = (sequelize, DataTypes) => {
     Inventory.init({
         name: DataTypes.STRING,
         address: DataTypes.STRING,
-        delete_at: DataTypes.DATE(6),
+        deleted_at: DataTypes.DATE(6),
+        created_at: DataTypes.DATE(6),
+        updated_at: DataTypes.DATE(6),
     }, {
         sequelize,
         modelName: 'Inventory',
+        timestamps: false
     });
     return Inventory;
 };

@@ -18,11 +18,14 @@ module.exports = (sequelize, DataTypes) => {
     Supplier.init({
         name: DataTypes.STRING,
         percent: DataTypes.INTEGER(11),
-        delete_at: DataTypes.DATE(6),
+        deleted_at: DataTypes.DATE(6),
         number_phone: DataTypes.STRING,
+        created_at: DataTypes.DATE(6),
+        updated_at: DataTypes.DATE(6),
     }, {
         sequelize,
         modelName: 'Supplier',
+        timestamps: false
     });
     return Supplier;
 };

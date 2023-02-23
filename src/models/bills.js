@@ -27,9 +27,12 @@ module.exports = (sequelize, DataTypes) => {
         number_phone: DataTypes.STRING(11),
         shipper_id: DataTypes.BIGINT(20),
         shipping_fee: DataTypes.INTEGER(11),
+        created_at: DataTypes.DATE(6),
+        updated_at: DataTypes.DATE(6),
     }, {
         sequelize,
         modelName: 'Bill',
+        timestamps: false
     });
     return Bill;
 };

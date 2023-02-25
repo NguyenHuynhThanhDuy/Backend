@@ -36,17 +36,17 @@ module.exports = (sequelize, DataTypes) => {
         img1: DataTypes.STRING,
         img2: DataTypes.STRING,
         description: DataTypes.STRING,
-        deleted_at: DataTypes.DATE(6),
-        brand_id: DataTypes.BIGINT(20),
-        category_id: DataTypes.BIGINT(20),
-        sale_code_id: DataTypes.INTEGER(11),
-        warranty_period: DataTypes.INTEGER(11),
-        created_at: DataTypes.DATE(6),
-        updated_at: DataTypes.DATE(6),
-        timestamps: false
+        deletedAt: { type: DataTypes.DATE(6), field: 'deleted_at' },
+        brandId: { type: DataTypes.BIGINT(20), field: 'brand_id' },
+        categoryId: { type: DataTypes.BIGINT(20), field: 'category_id' },
+        saleCodeId: { type: DataTypes.INTEGER(11), field: 'sale_code_id' },
+        warrantyPeriod: { type: DataTypes.INTEGER(11), field: 'warranty_period' },
+        createdAt: { type: DataTypes.DATE(6), field: 'created_at' },
+        updatedAt: { type: DataTypes.DATE(6), field: 'updated_at' },
     }, {
         sequelize,
         modelName: 'Product',
+        timestamps: false
     });
     return Product;
 };

@@ -2,12 +2,15 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const path = require('path');
 dotenv.config();
 const authRouter = require("./auth/auth.router");
+const productRouter = require("./products/product.router");
 async function App() {
     const app = express();
     const port = process.env.PORT || 3000;
     app.use(morgan('dev'));
+    app.use('/static', express.static(path.join(__dirname, '..', 'public/product/image')));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use((req, res, next) => {
@@ -21,6 +24,7 @@ async function App() {
     });
 
     app.use('/auth', authRouter);
+    app.use('/products', productRouter);
 
     app.use((req, res, next) => {
         const error = new Error('Not found');

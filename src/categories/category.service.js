@@ -1,6 +1,7 @@
 const connectDB = require('../core/database.js');
 const db = require('../models/index');
 const { BadRequest } = require('http-errors');
+const { buildPagination } = require('../core/utils/paginantion.utils.js');
 
 async function createCategory(body) {
     const category = await db.Category.create(body);
@@ -32,10 +33,18 @@ async function deleteCategory(id) {
     await category.destroy();
 }
 
+async function getCategories(req) {
+    const query = buildPagination(req);
+    const { rows, count } = await db.Category.findAndCountAll({
+        ...query
+    })
+    return { totalPage: Math.ceil(count / req.limit), categories: rows };
+}
 
 module.exports = {
     createCategory,
     updateCategory,
     getCategory,
-    deleteCategory
+    deleteCategory,
+    getCategories
 }

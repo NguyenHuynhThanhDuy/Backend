@@ -2,6 +2,8 @@ const Joi = require('joi');
 const productService = require('./product.service');
 const { BadRequest } = require('http-errors');
 const { validate } = require('../core/utils/validate.utils');
+const dotenv = require('dotenv');
+dotenv.config();
 
 async function createProduct(req, res, next) {
     try {
@@ -82,9 +84,30 @@ async function deleteProduct(req, res, next) {
     }
 }
 
+async function getProducts(req, res, next) {
+    try {
+        const schema = Joi.object({
+            page: Joi.number().default(1).min(1),
+            limit: Joi.number().default(5).max(10),
+            sort: Joi.string().allow(''),
+            sortBy: Joi.string().valid(...Object.values(['asc', 'desc'])).allow(''),
+            description: Joi.string().allow(''),
+            name: Joi.string().allow(''),
+            brandId: Joi.number().allow(''),
+            categoryId: Joi.number().allow(''),
+        })
+        const value = validate(req.query, schema);
+        const result = await productService.getProducts(value);
+        return res.status(200).send(result);
+    } catch (error) {
+        return next(error);
+    }
+}
+
 module.exports = {
     createProduct,
     updateProduct,
     getProduct,
-    deleteProduct
+    deleteProduct,
+    getProducts
 }

@@ -27,6 +27,27 @@ async function signup(req, res, next) {
     }
 }
 
+
+async function signin(req, res, next) {
+    try {
+        const schema = Joi.object({
+            email: Joi.string().email().required(),
+            password: Joi.string().min(8).required(),
+        });
+        const value = schema.validate(req.body);
+        if (value.error) {
+            throw new BadRequest(value.error.details[0].message)
+        } else {
+            const user = await authService.signin(req.body);
+            return res.status(200).json(user);
+        }
+
+    } catch (error) {
+        return next(error);
+    }
+}
+
 module.exports = {
-    signup
+    signup,
+    signin
 }

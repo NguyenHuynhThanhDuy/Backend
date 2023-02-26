@@ -2,6 +2,7 @@ const connectDB = require('../core/database.js');
 const db = require('../models/index');
 const { BadRequest } = require('http-errors');
 const fs = require('fs/promises');
+const { buildPagination } = require('../core/utils/paginantion.utils')
 
 async function createProduct(body) {
     const newProduct = await db.Product.create(body);
@@ -29,7 +30,6 @@ async function getProduct(id) {
         where: { id: id }
     })
     if (!product) throw new BadRequest('Product not found');
-
     return product;
 }
 
@@ -42,9 +42,19 @@ async function deleteProduct(id) {
     await product.destroy();
 }
 
+async function getProducts(req) {
+    const query = buildPagination(req);
+    console.log(query);
+    const { rows, count } = await db.Product.findAndCountAll({
+        ...query
+    });
+    return { totalPage: Math.ceil(count / req.limit), products: rows };
+}
+
 module.exports = {
     createProduct,
     updateProduct,
     getProduct,
-    deleteProduct
+    deleteProduct,
+    getProducts
 }

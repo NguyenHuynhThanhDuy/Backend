@@ -6,6 +6,8 @@ const path = require('path');
 dotenv.config();
 const authRouter = require("./auth/auth.router");
 const productRouter = require("./products/product.router");
+const brandRouter = require("./brands/brand.router");
+const categoryRouter = require("./categories/category.router");
 async function App() {
     const app = express();
     const port = process.env.PORT || 3000;
@@ -25,6 +27,8 @@ async function App() {
 
     app.use('/auth', authRouter);
     app.use('/products', productRouter);
+    app.use('/brands', brandRouter);
+    app.use('/categories', categoryRouter);
 
     app.use((req, res, next) => {
         const error = new Error('Not found');

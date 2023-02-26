@@ -20,17 +20,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init({
     email: DataTypes.STRING,
-    hashed_password: DataTypes.STRING,
+    hashedPassword: { type: DataTypes.STRING, field: 'hashed_password' },
     fullname: DataTypes.STRING,
     gender: DataTypes.STRING,
     address: DataTypes.STRING,
     role: DataTypes.STRING,
     birthday: DataTypes.DATE,
-    number_phone: DataTypes.STRING,
+    numberPhone: { type: DataTypes.STRING, field: 'number_phone' },
     verify: DataTypes.TINYINT,
-    created_at: DataTypes.DATE(6),
-    updated_at: DataTypes.DATE(6),
-    deleted_at: DataTypes.DATE(6),
+    createdAt: { type: DataTypes.DATE(6), field: 'created_at' },
+    updatedAt: { type: DataTypes.DATE(6), field: 'updated_at' },
+    deletedAt: { type: DataTypes.DATE(6), field: 'deleted_at' },
   }, {
     sequelize,
     modelName: 'User',

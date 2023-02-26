@@ -1,13 +1,13 @@
 const jwt = require("jsonwebtoken");
 const { Unauthorized, Forbidden } = require('http-errors');
 const express = require('express');
-const dotenv = require('express');
+const dotenv = require('dotenv');
 dotenv.config();
 
 function authorization(roles) {
-    const verifyToken = (req, res, next) => {
+    return verifyToken = (req, res, next) => {
         const token =
-            req.body.token || req.query.token || req.headers["x-access-token"];
+            req.body.token || req.query.token || req.headers.authorization;
 
         if (!token || !token.startsWith('Bearer')) {
             throw new Unauthorized('Token schema is invalid or missing');
@@ -15,13 +15,18 @@ function authorization(roles) {
 
         try {
             const accessToken = token.replace('Bearer ', '');
-            const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
+            const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY, { ignoreExpiration: false });
+            if (roles.length && !roles.some((role) => role === decoded.user.role)) {
+                throw new Forbidden('Forbidden accessible');
+            }
             req.user = decoded;
-        } catch (err) {
-            return res.status(401).send("Invalid Token");
+            return next();
+        } catch (error) {
+            const err = new Unauthorized(error.message)
+            next(err)
         }
-        return next();
+
     };
 }
 
-module.exports = verifyToken;
+module.exports = authorization;

@@ -24,7 +24,27 @@ async function updateProduct(id, body) {
     return newProduct;
 }
 
+async function getProduct(id) {
+    const product = await db.Product.findOne({
+        where: { id: id }
+    })
+    if (!product) throw new BadRequest('Product not found');
+
+    return product;
+}
+
+async function deleteProduct(id) {
+    const product = await db.Product.findOne({
+        where: { id: id }
+    })
+    if (!product) throw new BadRequest('Product not found');
+
+    await product.destroy();
+}
+
 module.exports = {
     createProduct,
-    updateProduct
+    updateProduct,
+    getProduct,
+    deleteProduct
 }

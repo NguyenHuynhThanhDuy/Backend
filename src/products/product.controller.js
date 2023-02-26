@@ -27,7 +27,7 @@ async function createProduct(req, res, next) {
             img1: imagesArr[0],
             img2: imagesArr[1]
         });
-        return res.json(201).send(result);
+        return res.status(201).send(result);
     } catch (error) {
         return next(error);
     }
@@ -58,13 +58,33 @@ async function updateProduct(req, res, next) {
             img1: imagesArr[0],
             img2: imagesArr[1]
         });
-        return res.json(200).send(result);
+        return res.status(200).send(result);
     } catch (error) {
+        return next(error);
+    }
+}
 
+async function getProduct(req, res, next) {
+    try {
+        const result = await productService.getProduct(req.params.id);
+        return res.status(200).send(result);
+    } catch (error) {
+        return next(error);
+    }
+}
+
+async function deleteProduct(req, res, next) {
+    try {
+        await productService.deleteProduct(req.params.id);
+        return res.status(200).send();
+    } catch (error) {
+        return next(error);
     }
 }
 
 module.exports = {
     createProduct,
-    updateProduct
+    updateProduct,
+    getProduct,
+    deleteProduct
 }

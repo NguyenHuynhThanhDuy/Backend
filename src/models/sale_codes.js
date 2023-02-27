@@ -18,14 +18,15 @@ module.exports = (sequelize, DataTypes) => {
     SaleCode.init({
         name: DataTypes.STRING,
         percent: DataTypes.INTEGER(11),
-        start_date: DataTypes.DATE,
-        end_date: DataTypes.DATE,
-        created_at: DataTypes.DATE(6),
-        updated_at: DataTypes.DATE(6),
-        timestamps: false
+        startDate: { type: DataTypes.DATE, field: 'start_date' },
+        endDate: { type: DataTypes.DATE, field: 'end_date' },
+        createdAt: { type: DataTypes.DATE(6), field: 'created_at' },
+        updatedAt: { type: DataTypes.DATE(6), field: 'updated_at' },
     }, {
         sequelize,
         modelName: 'SaleCode',
+        tableName: 'Sale_codes',
+        paranoid: true
     });
     return SaleCode;
 };

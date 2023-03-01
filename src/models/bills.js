@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             Bill.hasMany(models.BillDetail, {
-                foreignKey: 'id'
+                foreignKey: 'bill_id'
             });
             Bill.belongsTo(models.User, {
                 foreignKey: 'id'
@@ -19,20 +19,21 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     Bill.init({
-        customer_name: DataTypes.STRING,
+        customerName: { type: DataTypes.STRING, field: 'customer_name' },
         address: DataTypes.STRING,
         states: DataTypes.ENUM('waiting', 'accepted', 'shipping', 'delivering', 'delivered', 'cancel'),
         status: DataTypes.ENUM('unpaid', 'paid'),
-        user_id: DataTypes.BIGINT(20),
-        number_phone: DataTypes.STRING(11),
-        shipper_id: DataTypes.BIGINT(20),
-        shipping_fee: DataTypes.INTEGER(11),
-        created_at: DataTypes.DATE(6),
-        updated_at: DataTypes.DATE(6),
+        userId: { type: DataTypes.BIGINT(20), field: 'user_id', references: 'users', referencesKey: 'id' },
+        numberPhone: { type: DataTypes.STRING(11), field: 'number_phone' },
+        shipperId: { type: DataTypes.BIGINT(20), field: 'shipper_id' },
+        shippingFee: { type: DataTypes.INTEGER(11), field: 'shipping_fee' },
+        createdAt: { type: DataTypes.DATE(6), field: 'created_at' },
+        updatedAt: { type: DataTypes.DATE(6), field: 'updated_at' }
     }, {
         sequelize,
         modelName: 'Bill',
-        timestamps: false
+        timestamps: false,
+        tableName: 'bills'
     });
     return Bill;
 };

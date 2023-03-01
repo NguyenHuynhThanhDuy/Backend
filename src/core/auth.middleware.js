@@ -16,7 +16,7 @@ function authorization(roles) {
         try {
             const accessToken = token.replace('Bearer ', '');
             const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY, { ignoreExpiration: false });
-            if (roles.length && !roles.some((role) => role === decoded.user.role)) {
+            if (roles.length && !roles.some((role) => role === decoded.role)) {
                 throw new Forbidden('Forbidden accessible');
             }
             req.user = decoded;

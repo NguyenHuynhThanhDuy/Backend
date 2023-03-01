@@ -21,13 +21,14 @@ module.exports = (sequelize, DataTypes) => {
     BillDetail.init({
         count: DataTypes.INTEGER(11),
         price: DataTypes.INTEGER(11),
-        bill_id: DataTypes.BIGINT(20),
-        product_id: DataTypes.BIGINT(20),
-        timestamps: false
+        billId: { type: DataTypes.BIGINT(20), field: 'bill_id', references: 'bills', referencesKey: 'id' },
+        productId: { type: DataTypes.BIGINT(20), field: 'product_id', references: 'products', referencesKey: 'id' },
 
     }, {
         sequelize,
+        timestamps: false,
         modelName: 'BillDetail',
+        tableName: 'bill_details'
     });
     return BillDetail;
 };

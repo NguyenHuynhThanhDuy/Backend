@@ -14,15 +14,16 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     ProductInventory.init({
-        sold: DataTypes.INTEGER(11),
-        amount: DataTypes.INTEGER(11),
-        product_id: DataTypes.BIGINT(11),
-        inventory_id: DataTypes.BIGINT(11),
+        sold: { type: DataTypes.INTEGER(11), field: 'sold' },
+        amount: { type: DataTypes.INTEGER(11), field: 'amount' },
+        productId: { type: DataTypes.BIGINT(11), field: 'product_id', references: 'products', referencesKey: 'id' },
+        inventoryId: { type: DataTypes.BIGINT(11), field: 'inventory_id', references: 'inventories', referencesKey: 'id' },
 
     }, {
         sequelize,
         modelName: 'ProductInventory',
-        timestamps: false
+        timestamps: false,
+        tableName: 'products_inventories'
     });
     return ProductInventory;
 };

@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             Inventory.belongsToMany(models.Product, {
-                through: 'ProductInventory'
+                through: 'products_inventories',
+                foreignKey: 'inventory_id'
             });
         }
     }
@@ -24,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         sequelize,
         modelName: 'Inventory',
-        timestamps: false
+        timestamps: false,
+        tableName: 'inventories'
     });
     return Inventory;
 };

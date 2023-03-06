@@ -11,21 +11,22 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             Supplier.hasMany(models.PurchaseOrder, {
-                foreignKey: 'id'
+                foreignKey: 'supplierId'
             });
         }
     }
     Supplier.init({
         name: DataTypes.STRING,
         percent: DataTypes.INTEGER(11),
-        deleted_at: DataTypes.DATE(6),
-        number_phone: DataTypes.STRING,
-        created_at: DataTypes.DATE(6),
-        updated_at: DataTypes.DATE(6),
+        deletedAt: { type: DataTypes.DATE(6), field: 'deleted_at' },
+        numberPhone: { type: DataTypes.STRING, field: 'number_phone' },
+        createdAt: { type: DataTypes.DATE(6), field: 'created_at' },
+        updatedAt: { type: DataTypes.DATE(6), field: 'updated_at' },
     }, {
         sequelize,
         modelName: 'Supplier',
-        timestamps: false
+        tableName: 'Suppliers',
+        paranoid: true
     });
     return Supplier;
 };

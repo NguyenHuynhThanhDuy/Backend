@@ -10,18 +10,25 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-
+            PurchaseOrderDetail.belongsTo(models.PurchaseOrder, {
+                foreignKey: 'id'
+            });
+            PurchaseOrderDetail.belongsTo(models.Product, {
+                foreignKey: 'id'
+            });
         }
     }
     PurchaseOrderDetail.init({
         count: DataTypes.INTEGER(11),
         price: DataTypes.INTEGER(11),
-        purchase_order_id: DataTypes.BIGINT(20),
-        product_id: DataTypes.BIGINT(20),
-
+        purchaseOrderId: { type: DataTypes.BIGINT(20), field: 'purchase_order_id' },
+        productId: { type: DataTypes.BIGINT(20), field: 'product_id' },
     }, {
         sequelize,
-        modelName: 'PurchaseOrderDetail', timestamps: false
+        timestamps: false,
+        modelName: 'PurchaseOrderDetail',
+        tableName: 'Purchase_Order_Details',
+
     });
     return PurchaseOrderDetail;
 };

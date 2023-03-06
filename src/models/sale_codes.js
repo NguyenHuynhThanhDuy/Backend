@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'SaleCode',
         tableName: 'Sale_codes',
-        paranoid: true
+        timestamps: false
     });
     return SaleCode;
 };

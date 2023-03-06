@@ -42,8 +42,44 @@ async function updateSaleCode(req, res, next) {
 }
 async function deleteSaleCode(req, res, next) {
     try {
-        const result = await saleCodeService.deleteSaleCode(parseInt(req.params.id), value);
+        const result = await saleCodeService.deleteSaleCode(parseInt(req.params.id));
         res.status(200).send();
+
+    } catch (error) {
+        return next(error);
+    }
+}
+async function getSaleCodes(req, res, next) {
+    try {
+        const schema = Joi.object({
+            page: Joi.number().default(1).min(1),
+            limit: Joi.number().default(5).max(10),
+            sort: Joi.string().allow(''),
+            sortBy: Joi.string().valid(...Object.values(['asc', 'desc'])).allow(''),
+            percent: Joi.number().allow(''),
+            startDate: Joi.date().allow(''),
+            endDate: Joi.date().allow(''),
+        });
+        console.log(req.query)
+        const query = validate(req.query, schema);
+        const result = await saleCodeService.getSaleCodes(query);
+        return res.status(200).send(result);
+
+
+    } catch (error) {
+        return next(error);
+    }
+}
+
+async function getSaleCode(req, res, next) {
+    try {
+        const schema = Joi.object({
+            id: Joi.number().min(1).required(),
+        });
+        const { id } = validate(req.params, schema);
+
+        const result = await saleCodeService.getSaleCode(id);
+        return res.status(200).send(result);
 
     } catch (error) {
         return next(error);
@@ -52,5 +88,7 @@ async function deleteSaleCode(req, res, next) {
 module.exports = {
     createSaleCode,
     updateSaleCode,
-    deleteSaleCode
+    deleteSaleCode,
+    getSaleCodes,
+    getSaleCode
 }

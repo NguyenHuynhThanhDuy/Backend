@@ -16,19 +16,20 @@ module.exports = (sequelize, DataTypes) => {
             PurchaseOrder.belongsTo(models.User, {
                 foreignKey: 'id'
             });
-            PurchaseOrder.belongsToMany(models.Product, {
-                through: 'PurchaseOrderDetail'
+            PurchaseOrder.hasMany(models.PurchaseOrderDetail, {
+                foreignKey: 'purchaseOrderId'
             });
         }
     }
     PurchaseOrder.init({
-        supplier_id: DataTypes.BIGINT(20),
-        staff_id: DataTypes.BIGINT(20),
-        created_at: DataTypes.DATE(6),
-        updated_at: DataTypes.DATE(6),
+        supplierId: { type: DataTypes.BIGINT(20), field: 'supplier_id' },
+        staffId: { type: DataTypes.BIGINT(20), field: 'staff_id' },
+        createdAt: { type: DataTypes.DATE(6), field: 'created_at' },
+        updatedAt: { type: DataTypes.DATE(6), field: 'updated_at' },
     }, {
         sequelize,
         modelName: 'PurchaseOrder',
+        tableName: 'Purchase_Orders',
         timestamps: false
     });
     return PurchaseOrder;

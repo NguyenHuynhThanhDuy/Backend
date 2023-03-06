@@ -2,6 +2,7 @@ const connectDB = require('../core/database.js');
 const db = require('../models/index');
 const { BadRequest } = require('http-errors');
 const fs = require('fs/promises');
+const { buildPagination } = require('../core/utils/paginantion.utils')
 
 async function createSaleCode(body) {
     const { productIds, ...saleCode } = body
@@ -31,7 +32,7 @@ async function updateSaleCode(id, body) {
 
     return saleCode;
 }
-async function deleteSaleCode(id, body) {
+async function deleteSaleCode(id) {
     const saleCode = await db.SaleCode.findOne({ where: { id: id } });
     if (!saleCode) {
         throw new BadRequest('SaleCode not found');
@@ -42,8 +43,30 @@ async function deleteSaleCode(id, body) {
     }
     await saleCode.destroy();
 }
+async function getSaleCodes(filters) {
+    const query = buildPagination(filters);
+    console.log(query);
+    const { rows, count } = await db.SaleCode.findAndCountAll({
+        ...query,
+    });
+    return { totalPage: Math.ceil(count / filters.limit), saleCodes: rows };
+}
+
+async function getSaleCode(id) {
+    const saleCode = await db.SaleCode.findOne({
+        where: {
+            id: id,
+        },
+    });
+    if (!saleCode) {
+        throw new BadRequest('Sale Code not found');
+    }
+    return saleCode;
+}
 module.exports = {
     createSaleCode,
     updateSaleCode,
-    deleteSaleCode
+    deleteSaleCode,
+    getSaleCodes,
+    getSaleCode
 }

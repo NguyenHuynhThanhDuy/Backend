@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             Product.hasMany(models.BillDetail, {
-                foreignKey: 'product_id'
+                foreignKey: 'id'
             })
             Product.belongsTo(models.Brand, {
                 foreignKey: 'id'
@@ -22,12 +22,11 @@ module.exports = (sequelize, DataTypes) => {
             Product.belongsTo(models.SaleCode, {
                 foreignKey: 'id'
             });
-            Product.belongsToMany(models.Inventory, {
-                through: 'products_inventories',
-                foreignKey: 'product_id'
+            Product.hasMany(models.ProductInventory, {
+                foreignKey: 'productId'
             });
-            Product.belongsToMany(models.PurchaseOrder, {
-                through: 'PurchaseOrderDetail'
+            Product.hasMany(models.PurchaseOrderDetail, {
+                foreignKey: 'productId'
             });
         }
     }
@@ -38,9 +37,9 @@ module.exports = (sequelize, DataTypes) => {
         img2: DataTypes.STRING,
         description: DataTypes.STRING,
         deletedAt: { type: DataTypes.DATE(6), field: 'deleted_at' },
-        brandId: { type: DataTypes.BIGINT(20), field: 'brand_id', references: 'brands', referencesKey: 'id' },
-        categoryId: { type: DataTypes.BIGINT(20), field: 'category_id', references: 'categories', referencesKey: 'id' },
-        saleCodeId: { type: DataTypes.INTEGER(11), field: 'sale_code_id', references: 'sale_codes', referencesKey: 'id' },
+        brandId: { type: DataTypes.BIGINT(20), field: 'brand_id' },
+        categoryId: { type: DataTypes.BIGINT(20), field: 'category_id' },
+        saleCodeId: { type: DataTypes.INTEGER(11), field: 'sale_code_id' },
         warrantyPeriod: { type: DataTypes.INTEGER(11), field: 'warranty_period' },
         createdAt: { type: DataTypes.DATE(6), field: 'created_at' },
         updatedAt: { type: DataTypes.DATE(6), field: 'updated_at' },

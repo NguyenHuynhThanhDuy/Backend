@@ -10,23 +10,22 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Inventory.belongsToMany(models.Product, {
-                through: 'products_inventories',
-                foreignKey: 'inventory_id'
+            Inventory.hasMany(models.ProductInventory, {
+                foreignKey: 'inventoryId'
             });
         }
     }
     Inventory.init({
         name: DataTypes.STRING,
         address: DataTypes.STRING,
-        deleted_at: DataTypes.DATE(6),
-        created_at: DataTypes.DATE(6),
-        updated_at: DataTypes.DATE(6),
+        createdAt: { type: DataTypes.DATE(6), field: 'created_at' },
+        updatedAt: { type: DataTypes.DATE(6), field: 'updated_at' },
+        deletedAt: { type: DataTypes.DATE(6), field: 'deleted_at' },
     }, {
         sequelize,
         modelName: 'Inventory',
-        timestamps: false,
-        tableName: 'inventories'
+        tableName: 'inventories',
+        timestamps: false
     });
     return Inventory;
 };

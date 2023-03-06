@@ -9,6 +9,12 @@ const productRouter = require("./products/product.router");
 const brandRouter = require("./brands/brand.router");
 const categoryRouter = require("./categories/category.router");
 const billRouter = require('./bills/bill.router');
+const purchaseOrderRouter = require("./purchase_orders/purchase_orders.router");
+const supplierRouter = require("./suppliers/suppliers.router");
+const saleCodeRouter = require("./sale_codes/sale_codes.router");
+const inventoryRouter = require("./inventories/inventories.router");
+const userRouter = require("./users/users.router");
+
 const cors = require('cors');
 
 async function App() {
@@ -34,6 +40,11 @@ async function App() {
     app.use('/brands', brandRouter);
     app.use('/categories', categoryRouter);
     app.use('/bills', billRouter);
+    app.use('/sale-codes', saleCodeRouter);
+    app.use('/purchase-orders', purchaseOrderRouter);
+    app.use('/inventories', inventoryRouter);
+    app.use('/users', userRouter);
+    app.use('/suppliers', supplierRouter);
 
     app.use((req, res, next) => {
         const error = new Error('Not found');

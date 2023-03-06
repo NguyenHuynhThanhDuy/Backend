@@ -70,8 +70,8 @@ async function acceptBill(req, res, next) {
             status: Joi.string().default(BillStatus.UNPAID)
         })
         const value = validate(req.body, schema);
-        const result = await billService.acceptBill(req.params.id, value);
-        return res.status(200).send(result);
+        await billService.acceptBill(req.params.id, value);
+        return res.status(200).send();
     } catch (error) {
         return next(error);
     }
@@ -80,12 +80,16 @@ async function acceptBill(req, res, next) {
 async function getHistory(req, res, next) {
     try {
         const schema = Joi.object({
+            userId: Joi.number(),
             page: Joi.number().default(1).min(1),
             limit: Joi.number().default(5).max(10),
             states: Joi.array().items(Joi.string().valid(...Object.values({ ...OrderStates }))),
-            userId: Joi.number().required()
         });
-        const value = validate(req.query, schema);
+        let getHistory = {
+            ...req.query,
+            userId: req.user.id
+        }
+        const value = validate(getHistory, schema);
         const result = await billService.getHistory(value);
         return res.status(200).send(result);
     } catch (error) {

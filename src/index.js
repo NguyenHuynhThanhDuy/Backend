@@ -9,9 +9,12 @@ const productRouter = require("./products/product.router");
 const brandRouter = require("./brands/brand.router");
 const categoryRouter = require("./categories/category.router");
 const billRouter = require('./bills/bill.router');
+const cors = require('cors');
+
 async function App() {
     const app = express();
     const port = process.env.PORT || 3000;
+    app.use(cors());
     app.use(morgan('dev'));
     app.use('/static', express.static(path.join(__dirname, '..', 'public/product/image')));
     app.use(bodyParser.urlencoded({ extended: false }));

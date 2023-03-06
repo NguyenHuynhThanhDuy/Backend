@@ -5,14 +5,16 @@ const {
     createBill,
     getBill,
     getBills,
-    acceptBill
+    acceptBill,
+    getHistory
 } = require('./bill.controller');
 
 const router = express.Router();
 
-router.post('/', authorization(['customer']), createBill);
-router.get('/:id', getBill);
+router.post('/', authorization([Roles.CUSTOMER]), createBill);
+// router.get('/:id', getBill);
 router.get('/', getBills);
 router.put('/:id', acceptBill);
+router.get('/history', authorization([Roles.CUSTOMER]), getHistory);
 
 module.exports = router;

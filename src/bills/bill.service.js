@@ -4,6 +4,7 @@ const { buildPagination } = require('../core/utils/paginantion.utils');
 const { where } = require('sequelize');
 const { Op } = require("sequelize");
 const { BillStatus, OrderStates } = require('../core/constant');
+const { sendMail } = require('../core/utils/send-email.utils');
 
 async function createBill({ details, ...body }) {
     const bill = await db.Bill.create(body);
@@ -41,7 +42,8 @@ async function getBill(id) {
 
 async function getHistory(req) {
     const query = buildPagination(req);
-    const { rows, count } = db.Bill.findAndCountAll({
+    console.log(query);
+    const { rows, count } = await db.Bill.findAndCountAll({
         ...query,
         include: db.BillDetail
     })
@@ -56,30 +58,49 @@ async function acceptBill(id, body) {
     if (!bill) {
         throw new BadRequest('Bill not found')
     }
+    if (bill.states === body.states) {
+        throw new BadRequest('states already')
+    }
+
+    if (body.states === OrderStates.DELIVERED) {
+        body.status = BillStatus.PAID;
+    }
+
     await bill.update({ ...body })
     const filter = await getProductInventory(body.states, bill);
-    const arr = filter.map(detail => ({
-        ...detail.dataValues
-    }));
     if (filter) {
+        const arr = filter.map(detail => ({
+            ...detail.dataValues
+        }));
         await db.ProductInventory.bulkCreate(
             arr,
             {
                 updateOnDuplicate: ["amount", "sold"]
             }
-        );
-        // return neww;
+        )
     }
+    const billInfo = billInformation(bill);
+    const currentStates = statesMessage[body.states];
 
-    return arr;
+    if (bill.userId) {
+        const user = await db.User.findOne({
+            where: { id: bill.userId },
+            attribute: ['email']
+        })
+        sendMail({
+            email: user.email,
+            subject: "Goldduck Camera - Trạng Thái Đơn Hàng",
+            template: 'order-states',
+            context: { currentStates, billInfo }
+        }).catch(error => console.log(error));
+    }
 }
 
 async function getProductInventory(states, bill) {
     const productIds = bill.BillDetails.map(detail => detail.productId);
 
     const productInventory = await db.ProductInventory.findAll({
-        where: { inventoryId: 1, productId: { [Op.in]: productIds } },
-        attributes: ['id', 'sold', 'amount', 'productId', 'inventoryId']
+        where: { inventoryId: 1, productId: { [Op.in]: productIds } }
     })
 
     if (states === OrderStates.SHIPPING) {
@@ -107,11 +128,25 @@ async function getProductInventory(states, bill) {
     return null;
 }
 
+const statesMessage = {
+    'accepted': 'Đơn hàng đã được xác nhận',
+    'shipping': 'Đơn hàng đã giao cho đơn vị vận chuyển',
+    'delivering': 'Đơn hàng đang giao đến bạn',
+    'delivered': 'Đơn hàng đã được nhận',
+    'cancel': 'Đơn hàng đã bị hủy'
+}
+
+function billInformation(bill) {
+    return `Địa chỉ nhận hàng: 
+    ${bill.customerName}, 
+    (+84)${bill.numberPhone.slice(1)}, 
+    ${bill.address}.`
+}
+
 module.exports = {
     createBill,
     getBills,
     getBill,
     getHistory,
-    acceptBill,
-    getProductInventory
+    acceptBill
 }

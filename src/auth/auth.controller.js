@@ -42,7 +42,21 @@ async function signin(req, res, next) {
     }
 }
 
+async function forgotPassword(req, res, next) {
+    try {
+        const schema = Joi.object({
+            email: Joi.string().email().required()
+        })
+        const value = validate(req.body, schema);
+        await authService.forgotPassword(value);
+        return res.status(200).send();
+    } catch (error) {
+        return next(error);
+    }
+}
+
 module.exports = {
     signup,
-    signin
+    signin,
+    forgotPassword
 }

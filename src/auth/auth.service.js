@@ -2,9 +2,10 @@ const connectDB = require('../core/database.js');
 const db = require('../models/index');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const { BadRequest } = require('http-errors');
+const { BadRequest, NotFound } = require('http-errors');
 const saltRounds = 10;
 const dotenv = require('dotenv');
+const { sendMail } = require('../core/utils/send-email.utils');
 dotenv.config();
 
 async function signup(body) {
@@ -56,7 +57,24 @@ async function signin(body) {
     delete newUser.dataValues.hashedPassword
     return { information: newUser.dataValues, accessToken };
 }
+
+async function forgotPassword(body) {
+    const user = await db.User.findOne({
+        where: { email: body.email }
+    })
+    if (!user) throw new NotFound('User not found');
+
+    const resetPasswordLink = `${process.env.WEB_FORGOT_PASSWORD_URL}/${user.id}`;
+    sendMail({
+        email: user.email,
+        subject: "Goldduck Camera - Password reset",
+        template: 'reset-password',
+        context: { resetPasswordLink }
+    }).catch(error => console.log(error));
+}
+
 module.exports = {
     signup,
-    signin
+    signin,
+    forgotPassword
 }

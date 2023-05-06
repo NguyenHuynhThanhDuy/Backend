@@ -62,7 +62,8 @@ async function getPurchaseOrders(filters) {
 }
 async function getPurchaseOrder(id) {
     const purchaseOrder = await db.PurchaseOrder.findOne({
-        where: { id: id }
+        where: { id: id },
+        include: db.PurchaseOrderDetail,
     });
     if (!purchaseOrder) throw new BadRequest('Purhcase Order not found');
 

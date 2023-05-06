@@ -7,11 +7,11 @@ dotenv.config();
 
 async function sendMail({ email, subject, template, context }) {
     let transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: parseInt(process.env.EMAIL_PORT),
-        service: process.env.EMAIL_SERVICE,
-        secure: false, // true for 465, false for other ports
-        ignoreTLS: false,
+        // host: process.env.EMAIL_HOST,
+        // port: parseInt(process.env.EMAIL_PORT),
+        service: 'gmail',
+        // secure: false, // true for 465, false for other ports
+        // ignoreTLS: false,
         auth: {
             user: process.env.EMAIL_AUTH_USER,
             pass: process.env.EMAIL_AUTH_PASS,

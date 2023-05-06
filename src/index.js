@@ -15,6 +15,11 @@ const saleCodeRouter = require("./sale_codes/sale_codes.router");
 const inventoryRouter = require("./inventories/inventories.router");
 const userRouter = require("./users/users.router");
 
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+require('./core/utils/passport.utils');
+const session = require('express-session');
+
 const cors = require('cors');
 
 async function App() {
@@ -34,6 +39,14 @@ async function App() {
         }
         next();
     });
+
+    app.use(session({
+        resave: false,
+        saveUninitialized: true,
+        secret: 'SECRET'
+    }))
+    app.use(passport.initialize());
+    app.use(passport.session());
 
     app.use('/auth', authRouter);
     app.use('/products', productRouter);

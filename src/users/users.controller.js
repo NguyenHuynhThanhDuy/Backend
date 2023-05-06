@@ -2,6 +2,7 @@ const Joi = require('joi');
 const userService = require('./users.service');
 const { BadRequest } = require('http-errors');
 const { validate } = require('../core/utils/validate.utils');
+const { Roles, Gender } = require('../core/constant')
 
 async function createUser(req, res, next) {
     try {
@@ -10,10 +11,10 @@ async function createUser(req, res, next) {
             password: Joi.string().min(8).required(),
             fullname: Joi.string().max(255).required(),
             birthday: Joi.date(),
-            gender: Joi.string().default('male'),
+            gender: Joi.string().default(Gender.MALE),
             address: Joi.string().max(255).default(null),
             numberPhone: Joi.string().min(10).max(11),
-            role: Joi.string().default('customer'),
+            role: Joi.string().default(Roles.CUSTOMER),
             verify: Joi.boolean().default(true)
         });
 
@@ -31,7 +32,7 @@ async function updateUser(req, res, next) {
         const schema = Joi.object({
             fullname: Joi.string().max(255),
             birthday: Joi.date(),
-            gender: Joi.string().default('male'),
+            gender: Joi.string().default(Gender.MALE),
             address: Joi.string().max(255).default(null),
             numberPhone: Joi.string().min(10).max(11),
         });
@@ -60,9 +61,9 @@ async function getUsers(req, res, next) {
             sort: Joi.string().allow(''),
             sortBy: Joi.string().valid(...Object.values(['asc', 'desc'])).allow(''),
             fullname: Joi.string().allow(''),
-            gender: Joi.string().valid(...Object.values(['male', 'female', 'other'])).allow(''),
+            gender: Joi.string().valid(...Object.values({ ...Gender })).allow(''),
             address: Joi.string().allow(''),
-            role: Joi.string().valid(...Object.values(['admin', 'manager', 'staff', 'customer', 'shipper'])).allow('')
+            role: Joi.string().valid(...Object.values({ ...Roles })).allow('')
         });
         console.log(req.query)
         const query = validate(req.query, schema);
@@ -94,7 +95,7 @@ async function getLockedUsers(req, res, next) {
             sort: Joi.string().allow(''),
             sortBy: Joi.string().valid(...Object.values(['asc', 'desc'])).allow(''),
             fullname: Joi.string().allow(''),
-            gender: Joi.string().valid(...Object.values(['male', 'female', 'other'])).allow(''),
+            gender: Joi.string().valid(...Object.values({ ...Gender })).allow(''),
             address: Joi.string().allow(''),
         });
 

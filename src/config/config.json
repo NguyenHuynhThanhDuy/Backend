@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "0972155055",
+    "password": null,
     "database": "cmr_test2",
     "host": "127.0.0.1",
     "dialect": "mysql"
